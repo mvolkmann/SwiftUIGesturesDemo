@@ -25,10 +25,14 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
-            Text("currentScale = \(currentScale)")
-            Text("deltaScale = \(deltaScale)")
-            Text("currentRotation = \(currentRotation.degrees)")
-            Text("deltaRotation = \(deltaRotation.degrees)")
+            Text("In a Preview or the Simulator, hold down")
+            Text("the option key and drag to zoom and rotate.")
+            /*
+             Text("currentScale = \(currentScale)")
+             Text("deltaScale = \(deltaScale)")
+             Text("currentRotation = \(currentRotation.degrees)")
+             Text("deltaRotation = \(deltaRotation.degrees)")
+             */
             Image(systemName: "globe")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
