@@ -66,57 +66,62 @@ struct ContentView: View {
             }
             .padding()
 
-            VStack(alignment: .leading) {
-                let x = halfImgSize + currentDrag.width + deltaDrag.width
-                let y = halfImgSize + currentDrag.height + deltaDrag.height
-                let _ = print("x = \(x), y = \(y)")
-                Image(systemName: "globe")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(maxWidth: imgSize)
+            // Determine the position of the center of the image.
+            let halfItemSize = halfImgSize * currentScale
+            let x = halfItemSize + currentDrag.width + deltaDrag.width
+            let y = halfItemSize + currentDrag.height + deltaDrag.height
 
-                    .position(x: x, y: y)
-                    // .scaleEffect(isTapped ? 0.7 : 1)
-                    // .animation(.easeInOut(duration: 0.5), value: isTapped)
+            Image(systemName: "globe")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(maxWidth: imgSize)
 
-                    // The `gesture` view modifier can be used to listen for any
-                    // kind of gesture.
-                    // In addition, some gestures have a dedicated view
-                    // modifier,
-                    // for example, `onLongPressGesture` and `onTapGesture`.
+                .position(x: x, y: y)
+                // .scaleEffect(isTapped ? 0.7 : 1)
+                // .animation(.easeInOut(duration: 0.5), value: isTapped)
 
-                    // `minimumDuration` to be considered a long-press is 0.5
-                    // seconds.
-                    // A different duration can be passed to
-                    // `onLongPressGesture`.
-                    // .onLongPressGesture { isLongPressed.toggle() }
+                // The `gesture` view modifier can be used to listen for any
+                // kind of gesture.
+                // In addition, some gestures have a dedicated view
+                // modifier,
+                // for example, `onLongPressGesture` and `onTapGesture`.
 
-                    // This is the short way to listen for tap gestures.
-                    // .onTapGesture { isTapped.toggle() }
+                // `minimumDuration` to be considered a long-press is 0.5
+                // seconds.
+                // A different duration can be passed to
+                // `onLongPressGesture`.
+                // .onLongPressGesture { isLongPressed.toggle() }
 
-                    // This is the long way to listen for tap gestures.
-                    // To require a double-tap, pass `count: 2` to `TapGesture`.
-                    // .gesture(TapGesture().onEnded { isTapped.toggle() })
+                // This is the short way to listen for tap gestures.
+                // .onTapGesture { isTapped.toggle() }
 
-                    .rotationEffect(currentRotation + deltaRotation)
-                    .scaleEffect(currentScale * deltaScale)
-                    // Note use of `.simultaneously` to support multiple
-                    // gestures.
-                    .gesture(
-                        drag.simultaneously(
-                            with: magnification.simultaneously(
-                                with: rotation
-                            )
-                        )
-                    )
+                // This is the long way to listen for tap gestures.
+                // To require a double-tap, pass `count: 2` to `TapGesture`.
+                // .gesture(TapGesture().onEnded { isTapped.toggle() })
 
-                    .foregroundStyle(isLongPressed ? .red : .blue)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(.yellow.opacity(0.2))
-            .border(.red, width: 5)
-            .ignoresSafeArea()
+                .rotationEffect(currentRotation + deltaRotation)
+                .scaleEffect(currentScale * deltaScale)
+                // Note use of `.simultaneously` to support multiple
+                // gestures.
+                .gesture(drag)
+                .gesture(magnification)
+                /*
+                     drag.simultaneously(
+                         with: magnification.simultaneously(
+                             with: rotation
+                         )
+                     )
+                 */
+
+                .foregroundStyle(isLongPressed ? .red : .blue)
+
+            Circle()
+                .fill(.red)
+                .frame(height: 10)
+                .position(x: x, y: y)
         }
+        .background(.yellow.opacity(0.2))
+        .ignoresSafeArea()
     }
 }
 
