@@ -63,17 +63,30 @@ struct ContentView: View {
 
             let offsetX = currentDrag.width + deltaDrag.width
             let offsetY = currentDrag.height + deltaDrag.height
+
+            // TODO: Why doesn't it work to select a gesture like this?
             // let gesture: any Gesture =
             //    canDrag ? drag : rotation.simultaneously(with: scale)
+
             Rectangle()
                 .fill(.red)
                 .frame(width: 100, height: 100)
                 .scaleEffect(currentScale * deltaScale)
                 .rotationEffect(currentRotation + deltaRotation)
                 .offset(x: offsetX, y: offsetY)
+                // Using position instead of offset did not help.
+                // .position(x: offsetX, y: offsetY)
+
+                // TODO: Why doesn't this work?
                 // .gesture(gesture)
+
+                // A workaround for the above is to
+                // conditionally apply view modifiers.
                 .if(canDrag) { view in view.gesture(drag) }
                 .if(!canDrag) { view in
+                    // TODO: Why does this only work if
+                    // TODO: the shape has not been dragged or
+                    // TODO: has been dragged back to the center?
                     view.gesture(rotation.simultaneously(with: scale))
                 }
         }
