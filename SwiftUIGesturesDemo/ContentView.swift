@@ -20,7 +20,7 @@ extension View {
 }
 
 struct ContentView: View {
-    @GestureState private var deltaRotation = Angle.zero
+    // @GestureState private var deltaRotation = Angle.zero
     @GestureState private var deltaScale = 1.0
     @State private var canDrag = false
     @State private var currentDrag = CGSize.zero
@@ -39,19 +39,32 @@ struct ContentView: View {
     }
 
     private var rotation: some Gesture {
-        RotationGesture()
-            .updating($deltaRotation) { value, state, _ in
-                state = value
-            }
-            .onEnded { currentRotation += $0 }
+        /* Before iOS 17
+         RotationGesture()
+             .updating($deltaRotation) { value, state, _ in
+                 state = value
+             }
+             .onEnded { currentRotation += $0 }
+         */
+        // After iOS 17
+        RotateGesture()
+            .onChanged { value in currentRotation = value.rotation }
     }
 
     private var scale: some Gesture {
-        MagnificationGesture()
+        /* Before iOS 17
+         MagnificationGesture()
+             .updating($deltaScale) { value, state, _ in
+                 state = value
+             }
+             .onEnded { currentScale *= $0 }
+         */
+        // After iOS 17
+        MagnifyGesture()
             .updating($deltaScale) { value, state, _ in
-                state = value
+                state = value.magnification
             }
-            .onEnded { currentScale *= $0 }
+            .onEnded { currentScale *= $0.magnification }
     }
 
     var body: some View {
@@ -72,7 +85,8 @@ struct ContentView: View {
                 .fill(.red)
                 .frame(width: 100, height: 100)
                 .scaleEffect(currentScale * deltaScale)
-                .rotationEffect(currentRotation + deltaRotation)
+                // .rotationEffect(currentRotation + deltaRotation)
+                .rotationEffect(currentRotation)
                 .offset(x: offsetX, y: offsetY)
                 // Using position instead of offset did not help.
                 // .position(x: offsetX, y: offsetY)
